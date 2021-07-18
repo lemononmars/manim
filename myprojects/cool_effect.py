@@ -14,7 +14,7 @@ class EffectExamples(Scene):
         title = Text(r'self.ellipse()', font = "Consolas", color = YELLOW, t2c = {'self':BLUE, '()':WHITE})
         title.to_edge(DOWN)
         self.add(title)
-        
+
         text_start = text.copy()
         self.add(text_start)
 
@@ -67,14 +67,15 @@ class EffectExamples(Scene):
             *[ApplyMethod(text_start[i].move_to, text[i].get_center()) for i in range(len(text))],
             lag_ratio = 0.2
         ))
-        self.remove(title, text_start)
+        self.remove(title)
+        self.remove(*text_start) #since text_start had been animated individually, we need to remove it the same way
 
     def disperse(self):
         title = Text(r'self.disperse()', font = "Consolas", color = YELLOW, t2c = {'self':BLUE, '()':WHITE})
         title.to_edge(DOWN)
         self.add(title)
         
-        self.add(text)
+        #self.add(text)
         text_end = text.copy()
         # set endpoints on an ellipse that is off screen 
         ellipse = Ellipse(width = 20, height = 12)
