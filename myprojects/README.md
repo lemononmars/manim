@@ -17,6 +17,6 @@ Lyric Video
 It turns out you can make a lyric video! [``song.py``](song.py)
 
 <a href="https://www.youtube.com/watch?v=AQQIctTGeJA " target="_blank"><img src="media/lyricvideo.png" 
-alt="lyric video using Manim" width="400"/></a>
+alt="lyric video using Manim" width="600"/></a>
 
 Ignoring fancy animations, there's one main trick here. ``time.perf_counter()`` is for compiler, not for animation. You have to jump forward to a specific timestamp using ``self.wait(timestamp - self.time)``.
