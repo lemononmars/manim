@@ -10,5 +10,4 @@ https://zulko.github.io/moviepy/examples/moving_letters.html
 
 And sure enough you can! See the example below and find the corresponding code in ``cool_effect.py``
 
-.. image:: media/EffectExamples.gif
-   :align: center
+![Image](media/EffectExamples.md)
