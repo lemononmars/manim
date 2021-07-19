@@ -1,51 +1,53 @@
+from sys import builtin_module_names
 from manimlib.imports import *
 from MeepleCreature.MeepleCreature import *
 
 NUM_PLAYERS = 4
-MC = Meeple()
 
 class Movie(Scene):
     def construct(self):
-        self.intro()
-        self.toc()
+        self.MC = Meeple()
+        #self.intro()
+        #self.toc()
+        self.tictactoe()
         #self.game_structure()
         #self.turn_order()
 
     def intro(self):
-        MC.to_edge(DOWN)
+        self.MC.to_edge(DOWN)
         text1 = Text("สวัสดีครับ\nผมชื่อกลครับ", font = "Anakotmai Light", line_spacing= 4)
         text1.set_color(random_bright_color()).scale(1.5)
         text2 = Text("วันนี้เรามาศึกษา\nกลไกในบอร์ดเกมกัน", font = "Anakotmai Light", line_spacing = 3)
         text2.set_color(random_bright_color()).scale(1.5)
-        self.play(DrawBorderThenFill(MC))
-        self.play(Blink(MC))
+        self.play(DrawBorderThenFill(self.MC))
+        self.play(Blink(self.MC))
         
         self.play(MeepleCreatureSays(
-            MC, text1, 
+            self.MC, text1, 
             bubble_kwargs = {"height" : 4, "width" : 6},
             target_mode="speaking",
             is_looking_direction_purposeful = False,
         ))
 
         self.wait()
-        self.play(Blink(MC))
-        self.play(RemoveMeepleCreatureBubble(MC))
+        self.play(Blink(self.MC))
+        self.play(RemoveMeepleCreatureBubble(self.MC))
         self.play(MeepleCreatureSays(
-            MC, text2, 
+            self.MC, text2, 
             bubble_kwargs = {"height" : 4, "width" : 6},
             target_mode="speaking",
             is_looking_direction_purposeful = False,
         ))
-        self.play(Blink(MC))
+        self.play(Blink(self.MC))
 
         book = ImageMobject("book_cover")
         book.shift(UP + 4*RIGHT).scale(2.5)
         self.play(FadeInFromDown(book))
-        MC.look_at(book)
+        self.MC.look_at(book)
         self.wait(1)
 
-        self.play(RemoveMeepleCreatureBubble(MC))
-        self.play(FadeOutAndShiftDown(MC))
+        self.play(RemoveMeepleCreatureBubble(self.MC))
+        self.play(FadeOutAndShiftDown(self.MC))
 
         author_image = ImageMobject("geoff").scale(2)
         author_title = Text(f'Geoffrey Engelstein', font = "Prompt")
@@ -57,14 +59,14 @@ class Movie(Scene):
 
         quote = Text(f'Building Blocks of Tabletop Game Design: An Encyclopedia of Mechanisms\ncompiles hundreds of different mechanisms, organized by category.\nEach has a description of how it works, discussion of its pros and cons,\nhow it can be implemented, and examples of specific games that use it.', font = "Prompt").scale(0.6).set_color(GOLD_A)
         quote.to_edge(LEFT, buff = 1).shift(2.5*DOWN)
-        self.play(Write(quote), run_time = 15) #13 seconds to read
+        self.play(ShowCreation(quote), run_time = 15) #13 seconds to read
 
         self.play(AnimationGroup(
             FadeOutAndShiftDown(quote),
             FadeOutAndShiftDown(author),
             FadeOutAndShiftDown(book)
         ))
-        self.play(FadeInFromDown(MC))
+        self.play(FadeInFromDown(self.MC))
 
     def toc(self):
         
@@ -84,10 +86,10 @@ class Movie(Scene):
             "Card Mechanism"
             ]
         
-        #topics = ["Game Structure"] # overwrite for shorter animation 
+        topics = ["Game Structure"] # overwrite for shorter animation 
 
         self.play(
-            MoveAlongPath(MC, Line(MC.get_center(), 5*RIGHT + 2*DOWN), rate_func = smooth)
+            MoveAlongPath(self.MC, Line(self.MC.get_center(), 5*RIGHT + 2*DOWN), rate_func = smooth)
         )
 
         text = []
@@ -99,9 +101,226 @@ class Movie(Scene):
         t.to_corner(UL)
 
         for i in t:
-            MC.look_at(i)
+            self.MC.look_at(i)
             self.play(Write(i))
-            self.play(Blink(MC))
+            self.play(Blink(self.MC))
+
+        text = Text("ทำไมเยอะจัง?", font = "Anakotmai Light", line_spacing = 3)
+        text.set_color(random_bright_color()).scale(1.5)
+        
+        self.play(Blink(self.MC))
+        self.play(MeepleCreatureSays(
+            self.MC, text, 
+            bubble_class = ThoughtBubble,
+            bubble_kwargs = {"height" : 4, "width" : 6},
+            target_mode="speaking",
+            is_looking_direction_purposeful = True,
+        ))
+        self.play(Blink(self.MC))
+        self.play(RemoveMeepleCreatureBubble(self.MC))
+
+    def tictactoe(self):
+        self.add_sound("narrate")
+        self.add_sound("windrider_edited")
+        self.MC2 = Meeple(color = RED, start_corner = DL)
+        self.MC.to_corner(DR).look_at(ORIGIN)
+        self.MC2.to_corner(DL).look_at(ORIGIN)
+        
+        line_endpoints = [
+            [3*UP + LEFT, 3*DOWN + LEFT], 
+            [3*UP + RIGHT, 3*DOWN + RIGHT], 
+            [3*LEFT + UP, 3*RIGHT + UP],
+            [3*LEFT + DOWN, 3*RIGHT + DOWN]
+        ]
+
+        self.play(FadeInFromDown(self.MC2))
+        self.play(FadeInFromDown(self.MC))
+        
+        #create tictactoe grid
+        lines = [Line(start = line_endpoints[i][0], end = line_endpoints[i][1]) for i in range(len(line_endpoints))]
+        self.play(AnimationGroup(
+            *[ShowCreation(l, run_time = 1) for l in lines],
+            lag_ratio = 0.2
+        ))
+
+        title = Text("Tic Tac Toe", color = GREEN_A).scale(1.2)
+        title.to_edge(DOWN)
+        self.play(FadeInFromDown(title))
+
+        self.wait(7-self.time)
+        text = Text("เกมนี้ประกอบด้วย\nกลไกอะไรบ้าง?", line_spacing = 3)
+        self.play(MeepleCreatureSays(
+            self.MC, text, 
+            bubble_kwargs = {"height" : 4, "width" : 8},
+            target_mode="speaking",
+            is_looking_direction_purposeful = True,
+        ))
+        self.play(Blink(self.MC))
+        self.play(RemoveMeepleCreatureBubble(self.MC))
+
+        #add sequence of play
+        tictactoe_plays = [(1,1), (1,0), (0,0), (2,2), (0,1), (0,2), (2,1)]
+        corner = 2*UP + 2*LEFT
+        marks = []
+        for i in range(len(tictactoe_plays)):
+            x, y = tictactoe_plays[i]
+            p1 = Circle(color = BLUE).scale(0.5)
+            if i % 2 == 1:
+                p1 = Cross(p1, color = RED).scale(0.8)
+            p1.move_to(corner + 2*x*RIGHT + 2*y*DOWN)
+            self.play(ShowCreation(p1), run_time = 0.5)
+            marks.append(p1)
+
+        winning = Line(3*LEFT, 3*RIGHT, color = BLUE, stroke_width = 10)
+        self.play(ShowCreation(winning))
+        trophy = ImageMobject("Trophy").next_to(self.MC, UP).set_color(GOLD)
+        self.play(FadeInFromLarge(trophy))
+        self.wait(1)
+        self.remove(winning, trophy)
+
+        # clear the board and start discussion
+        board = VGroup(*marks, *lines, title)
+        new_board = board.copy().scale(0.5).next_to(self.MC, UP, buff = MED_LARGE_BUFF)
+        self.play(FadeOutAndShiftDown(self.MC2))
+        self.play(ReplacementTransform(board, new_board))
+        
+        self.wait(20-self.time)
+        
+        types = [
+            "2-player game",
+            "turn by turn",
+            "square grid",
+            "single action",
+            "pattern matching",
+            "single winner"
+        ]
+
+        type_text = VGroup(*[Text(t) for t in types]).arrange(DOWN, aligned_edge=LEFT)
+        type_text.scale(1.5).to_corner(UL)
+        for t in type_text:
+            self.play(Write(t))
+            self.wait(2)
+
+        self.wait(35-self.time)
+        text = Text("ถ้าเปลี่ยนบางส่วน\nแล้วจะเป็นอย่างไร?", font = "Anakotmai Light", line_spacing = 3)
+        text.set_color(random_bright_color()).scale(1.5)
+        
+        self.play(Blink(self.MC))
+        self.play(MeepleCreatureSays(
+            self.MC, text,
+            bubble_class = ThoughtBubble,
+            bubble_kwargs = {"height" : 4, "width" : 6},
+            target_mode="speaking",
+            is_looking_direction_purposeful = True,
+        ))
+        self.play(Blink(self.MC))
+        self.wait(42-self.time)
+        self.play(RemoveMeepleCreatureBubble(self.MC))
+
+        # changing first part
+        text = Text("3-player game?", fill_color = GREEN)
+        text.next_to(type_text[0], RIGHT)
+        cross = Line(type_text[0].get_left(), type_text[0].get_right(), color = RED, stroke_width = 10)
+        self.play(Indicate(type_text[0]))
+        self.wait(1)
+        self.play(ShowCreation(cross))
+        self.play(FadeInFrom(text, LEFT))
+        self.wait(47-self.time)
+        self.play(Indicate(type_text[4]))
+        self.play(ApplyMethod(type_text[4].set_opacity, 0.3))
+        self.wait(54-self.time)
+        self.remove(cross, text)
+        type_text[4].set_opacity(1)
+        self.wait(1)
+
+        # changing second part
+        text = Text("real time?", fill_color = GREEN)
+        text.next_to(type_text[1], RIGHT)
+        cross = Line(type_text[1].get_left(), type_text[1].get_right(), color = RED, stroke_width = 10)
+        self.wait(55-self.time)
+        self.play(Indicate(type_text[1]))
+        self.wait(1)
+        self.play(ShowCreation(cross))
+        self.play(FadeInFrom(text, LEFT))
+        self.wait(62-self.time)
+        self.play(Indicate(type_text[5]))
+        self.play(ApplyMethod(type_text[5].set_opacity, 0.3))
+        self.wait(69-self.time)
+        self.remove(cross, text)
+        type_text[5].set_opacity(1)
+
+        text = Text("เปลี่ยนอย่างไร\nได้บ้าง?", font = "Anakotmai Light", line_spacing = 3)
+        self.play(Blink(self.MC))
+        self.play(MeepleCreatureThinks(
+            self.MC, text,
+            bubble_kwargs = {"height" : 4, "width" : 6},
+            target_mode="speaking",
+            is_looking_direction_purposeful = True,
+        ))
+        self.play(Blink(self.MC))
+        self.wait(85-self.time)
+        self.play(RemoveMeepleCreatureBubble(self.MC))
+
+        self.play(AnimationGroup(
+            *[FadeOutAndShiftDown(t) for t in type_text],
+            lag_ratio = 0.1
+        ))
+        
+        # new types
+        types = [
+            "STR-01 Competitive Games",
+            "TRN-01 Fixed-Turn Order",
+            "ACT-01 Action Points",
+            "VIC-01 Victory Points from Game State"
+        ]
+
+        type_text = VGroup(*[Text(t) for t in types]).arrange(DOWN, aligned_edge=LEFT, buff = 0.8)
+        type_text.scale(1).to_corner(UL)
+        self.play(AnimationGroup(
+            *[FadeInFromDown(t) for t in type_text],
+            lag_ratio = 0.1
+        ))
+        
+        self.wait(88-self.time)
+        self.play(AnimationGroup(
+            *[Indicate(t[4:6]) for t in type_text],
+            lag_ratio = 0.2
+        ))
+
+        self.wait(99-self.time)
+        text = Text("Worker Placement?\nArea Control?", line_spacing = 3)
+        text.set_color(random_bright_color()).scale(1.5)
+        
+        self.play(FadeInFromDown(self.MC2))
+        self.MC.make_eye_contact(self.MC2)
+        self.play(Blink(self.MC))
+        self.play(MeepleCreatureSays(
+            self.MC2, text, 
+            bubble_kwargs = {"height" : 4, "width" : 6},
+            target_mode="speaking",
+            is_looking_direction_purposeful = True,
+        ))
+        self.play(Blink(self.MC2))
+        
+        self.wait(108-self.time)
+        self.play(RemoveMeepleCreatureBubble(self.MC2))
+        text = Text("อ่านคำจำกัดความ\nในหนังสือดูสิ", line_spacing = 3)
+        self.play(MeepleCreatureSays(
+            self.MC, text, 
+            bubble_kwargs = {"height" : 4, "width" : 6},
+            target_mode="speaking",
+            is_looking_direction_purposeful = True,
+        ))
+        self.play(Blink(self.MC))
+
+        book = ImageMobject("book_cover")
+        book.scale(1.5).to_edge(DOWN)
+        self.play(FadeInFromDown(book))
+        self.MC.look_at(book)
+        self.wait(114-self.time)
+        #self.remove(book)
+        #self.play(RemoveMeepleCreatureBubble(self.MC))
+        #self.wait()
 
     def game_structure(self):
         subtypes = [

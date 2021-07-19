@@ -75,7 +75,6 @@ class EffectExamples(Scene):
         title.to_edge(DOWN)
         self.add(title)
         
-        #self.add(text)
         text_end = text.copy()
         # set endpoints on an ellipse that is off screen 
         ellipse = Ellipse(width = 20, height = 12)
