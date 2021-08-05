@@ -1,15 +1,16 @@
 from sys import builtin_module_names
-from manimlib.imports import *
+from manim import *
 from MeepleCreature.MeepleCreature import *
 
 NUM_PLAYERS = 4
 
 class Movie(Scene):
     def construct(self):
-        self.MC = Meeple()
-        #self.intro()
+        self.MC = MeepleCreature()
+        self.add(self.MC)
+        self.intro()
         #self.toc()
-        self.tictactoe()
+        #self.tictactoe()
         #self.game_structure()
         #self.turn_order()
 
@@ -19,7 +20,7 @@ class Movie(Scene):
         text1.set_color(random_bright_color()).scale(1.5)
         text2 = Text("วันนี้เรามาศึกษา\nกลไกในบอร์ดเกมกัน", font = "Anakotmai Light", line_spacing = 3)
         text2.set_color(random_bright_color()).scale(1.5)
-        self.play(DrawBorderThenFill(self.MC))
+        self.play(Create(self.MC))
         self.play(Blink(self.MC))
         
         self.play(MeepleCreatureSays(
@@ -42,31 +43,31 @@ class Movie(Scene):
 
         book = ImageMobject("book_cover")
         book.shift(UP + 4*RIGHT).scale(2.5)
-        self.play(FadeInFromDown(book))
+        self.play(FadeIn(book, shift = DOWN))
         self.MC.look_at(book)
         self.wait(1)
 
         self.play(RemoveMeepleCreatureBubble(self.MC))
-        self.play(FadeOutAndShiftDown(self.MC))
+        self.play(FadeOut(self.MC, shift = DOWN))
 
         author_image = ImageMobject("geoff").scale(2)
         author_title = Text(f'Geoffrey Engelstein', font = "Prompt")
         author = Group(author_image, author_title).arrange(DOWN)
 
         author.shift(UP + 3*LEFT)
-        self.play(FadeInFromDown(author_image))
+        self.play(FadeIn(author_image, shift = DOWN))
         self.play(Write(author_title))
 
-        quote = Text(f'Building Blocks of Tabletop Game Design: An Encyclopedia of Mechanisms\ncompiles hundreds of different mechanisms, organized by category.\nEach has a description of how it works, discussion of its pros and cons,\nhow it can be implemented, and examples of specific games that use it.', font = "Prompt").scale(0.6).set_color(GOLD_A)
+        quote = Paragraph(f'Building Blocks of Tabletop Game Design: An Encyclopedia of Mechanisms\ncompiles hundreds of different mechanisms, organized by category.\nEach has a description of how it works, discussion of its pros and cons,\nhow it can be implemented, and examples of specific games that use it.', font = "Prompt").scale(0.6).set_color(GOLD_A)
         quote.to_edge(LEFT, buff = 1).shift(2.5*DOWN)
         self.play(ShowCreation(quote), run_time = 15) #13 seconds to read
 
         self.play(AnimationGroup(
-            FadeOutAndShiftDown(quote),
-            FadeOutAndShiftDown(author),
-            FadeOutAndShiftDown(book)
+            FadeOut(quote, shift = DOWN),
+            FadeOut(author, shift = DOWN),
+            FadeOut(book, shift = DOWN)
         ))
-        self.play(FadeInFromDown(self.MC))
+        self.play(FadeIn(self.MC, shift = DOWN))
 
     def toc(self):
         

@@ -1,4 +1,5 @@
-from manimlib.imports import *
+from manim import *
+from colour import Color
 
 class Fractal(Scene):
     def construct(self, step = 3, radius = 3):
@@ -60,8 +61,8 @@ class Fractal(Scene):
                 )
             latest_gen = new_gen
         
-        smaller = latest_gen.deepcopy()
+        smaller = latest_gen.copy()
         self.play(ScaleInPlace(smaller,0.5))
-        self.play(Rotating(latest_gen, radians = TAU, run_time = 5), Rotating(smaller, radians = TAU, run_time = 5))
+        self.play(Rotating(latest_gen, radians = -TAU, run_time = 5), Rotating(smaller, radians = TAU, run_time = 5))
         
     

@@ -1,9 +1,10 @@
-from manimlib.imports import *
+from manim import *
 
 class linear_first_order(Scene):
     def construct(self):
         title = Text("สมการเชิงเส้นอันดับ 2 ระดับขั้น 1", font="TH Sarabun New")
-        title.scale(3).set_color_by_gradient([GREEN, BLUE])
+        title.set_color_by_gradient([GREEN, BLUE])
+        title.set(width = self.camera.frame_width - 2*MED_LARGE_BUFF)
         title.to_edge(UP)
         self.play(Write(title))
 
@@ -12,7 +13,7 @@ class linear_first_order(Scene):
         t4 = Text("ผลเฉลยทั่วไป", font="TH Sarabun New")
         t5 = Text("ค่าคงตัวใด ๆ", font="TH Sarabun New")
         
-        eq1 = TexMobject("a",
+        eq1 = MathTex("a",
                           "y''",
                           "+",
                           "b",
@@ -23,7 +24,7 @@ class linear_first_order(Scene):
                           "= 0",
                          tex_to_color_map={"a": YELLOW, "b": RED, "c": BLUE})
 
-        eq2 = TexMobject("a",
+        eq2 = MathTex("a",
                           "m^2",
                           "+",
                           "b",
@@ -33,14 +34,14 @@ class linear_first_order(Scene):
                           "= 0",
                          tex_to_color_map={"a": YELLOW, "b": RED, "c": BLUE})
 
-        eq3 = TexMobject("m = ",
+        eq3 = MathTex("m = ",
                          "m_1",
                          ",",
                          "m_2")
         eq3[1].set_color(GREEN)
         eq3[3].set_color(PINK)
 
-        eq4 = TexMobject("y = ",
+        eq4 = MathTex("y = ",
                          "A_1",
                          "e^",
                          "{m_1",
@@ -53,7 +54,7 @@ class linear_first_order(Scene):
         eq4[7].set_color(PINK)
         
         group = VGroup(eq1, eq2, eq3, eq4).arrange(DOWN)  
-        group.set_width(FRAME_WIDTH - 5 * LARGE_BUFF)
+        group.set(width = self.camera.frame_width - 5 * LARGE_BUFF)
         group.to_edge(DOWN)
 
         t2.next_to(eq2, UP)
@@ -77,32 +78,32 @@ class linear_first_order(Scene):
         # scene sequence
         self.play(Write(eq1))
         self.wait(0.5)
-        self.play(ShowCreation(framebox1))
+        self.play(Create(framebox1))
         self.wait(0.5)
         self.play(FadeOut(framebox1))
         self.wait(0.5)
         
         self.play(ReplacementTransform(eq1.copy(), eq2))
         self.wait(0.5)
-        self.play(Write(t2), ShowCreation(framebox2))
+        self.play(Write(t2), Create(framebox2))
         self.wait(0.5)
         self.play(FadeOut(t2), FadeOut(framebox2))
         self.wait(0.5)
         
         self.play(ReplacementTransform(eq2.copy(), eq3))
         self.wait(0.5)
-        self.play(Write(t3), ShowCreation(framebox3))
+        self.play(Write(t3), Create(framebox3))
         self.wait(0.5)
         self.play(FadeOut(t3), FadeOut(framebox3))
         self.wait(0.5)
         
         self.play(ReplacementTransform(eq3.copy(), eq4))
         self.wait(0.5)
-        self.play(Write(t4), ShowCreation(framebox4))
+        self.play(Write(t4), Create(framebox4))
         self.wait(0.5)
         self.play(FadeOut(t4), FadeOut(framebox4))
         self.wait(0.5)
-        self.play(ShowCreation(framebox5), ShowCreation(framebox6))
+        self.play(Create(framebox5), Create(framebox6))
         self.play(Write(t5), GrowArrow(arrow1), GrowArrow(arrow2))
         self.wait(0.5)
         self.play(FadeOut(t5), FadeOut(arrow1), FadeOut(arrow2), FadeOut(framebox5), FadeOut(framebox6))

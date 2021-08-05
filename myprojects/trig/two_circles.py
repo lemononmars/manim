@@ -1,4 +1,4 @@
-from manimlib.imports import *
+from manim import *
 
 class TwoCircle_RightSide(Scene):
     def construct(self):

@@ -3,11 +3,17 @@ Hello Math Animator
 
 Here are my codes for Manim. Feel free to explore and reuse them all.
 
+Exponential Sum
+======================
+[``exponential_sum.py``](exponential_sum.py)
+
+<img src="media/exponential_sum.gif" alt="exponential sum animation gif" width="600"/>
+
 Cool Effect
 ======================
 You can create text animations as seen [here](https://zulko.github.io/moviepy/examples/moving_letters.html).
 
-See the example below and find the corresponding code in [``cool_effect.py``](cool_effect.py)
+See the example below and find the corresponding code in [``cool_effect.py``](test/cool_effect.py)
 
 <img src="media/EffectExamples.gif" alt="cool effect animation gif" width="600"/>
 
