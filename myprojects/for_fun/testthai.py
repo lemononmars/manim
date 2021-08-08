@@ -1,10 +1,10 @@
-from manimlib.imports import *
+from manim import *
 
 class Thai(Scene):
     def construct(self):
         # available fonts are:
         # KhanaRatsadon, TH SarabunPSK, 2005_iannnnnnCPU, Prompt, TH Charm of AU, Chulabhorn Likit Text
-        title1 = Text("รัฐบาลส้นตีน", font="Chulabhorn Likit Text").set_color(Color("#d3dde9"))
+        title1 = Tex("รัฐบาลส้นตีน", font="Chulabhorn Likit Text").set_color(Color("#d3dde9"))
         title1.scale(2)
         #title1.add_background_rectangle(color='white')
 

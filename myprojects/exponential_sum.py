@@ -14,7 +14,7 @@ class Trace(VMobject):
 
 class Pic(Scene):
    def construct(self):
-      NUM_LINES = 20
+      NUM_LINES = 5
 
       #starting configurations
       line_widths = [1/(1.2**x)*RIGHT for x in range(0,NUM_LINES)]
